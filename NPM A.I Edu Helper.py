@@ -1,4 +1,8 @@
-llms=input("Enter A.I from which you want to study so select and write exact from here:-{'ChatGPT',Grok','Perplexity','Gemini','GeminiAIMode'}:")
+llms=input("Enter A.I from which you want to study so select and write exact from here:-{'ChatGPT','Grok','Perplexity','Gemini','GeminiAIMode'}:")
+email=input("Do you want to send your question response to other person via email(gmail) if yes then just write'y' and if no just write 'n'")
+if email.lower()=="y":
+    to=input("write email id of that person you want to send just write email id")
+whatsapp=input("Do you want to send your question response to other person via Whatsapp if yes then just write'y' and if no just write 'n'")
 from pdf2image import convert_from_path
 from PIL import Image
 from sentence_transformers import SentenceTransformer
@@ -14,6 +18,15 @@ import pytesseract
 import fitz
 import os
 import cv2
+if email.lower()=="y":
+    from google.oauth2.credentials import Credentials
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    from googleapiclient.discovery import build
+    import base64
+    from email.mime.text import MIMEText
+
+else:
+    pass
 
 DB_PATH=input("Enter the name you want for your knowledge base")
 
@@ -73,6 +86,29 @@ def get_transcript(path):
     except Exception as e:
         return None
 
+def send_email(to,subject,response):
+    SCOPES=["https://www.googleapis.com/auth/gmail.send"]
+    if os.path.exists("token.json"):
+        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    else:
+        flow = InstalledAppFlow.from_client_secrets_file(
+            "credentials.json", SCOPES
+        )
+        creds = flow.run_local_server(port=0)
+        with open("token.json", "w") as f:
+            f.write(creds.to_json())
+    gmail=build("gmail", "v1", credentials=creds)
+
+    message = MIMEText(response)
+    message["to"] = to
+    message["subject"] = subject
+
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+    return gmail.users().messages().send(
+        userId="me",
+        body={"raw": raw}
+    ).execute()
 
 
 def ingest_file(path):
@@ -122,3 +158,6 @@ qa=RetrievalQA.from_chain_type(
    
 response=qa.invoke(question)
 print(response)
+if email.lower()=="y":
+    subject=f"Query:{question} and below answer"
+    send_email(to,subject,response)
