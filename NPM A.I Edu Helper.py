@@ -12,12 +12,16 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_classic.chains import RetrievalQA
 from npmai import ChatGPT,Perplexity,Grok,Gemini
+from moviepy.editor import VideoFileClip
 import youtube_transcript_api
 import numpy as np
 import pytesseract
+import whisper
+import yt_dlp
 import fitz
 import os
 import cv2
+
 if email.lower()=="y":
     from google.oauth2.credentials import Credentials
     from google_auth_oauthlib.flow import InstalledAppFlow
@@ -27,6 +31,7 @@ if email.lower()=="y":
 
 else:
     pass
+
 
 DB_PATH=input("Enter the name you want for your knowledge base")
 
@@ -83,8 +88,26 @@ def get_transcript(path):
         transcript = YouTubeTranscriptApi.get_transcript(path)
         full = " ".join([item["text"] for item in transcript])
         return full
-    except Exception as e:
-        return None
+    except:
+        link=input("Enter video link to proceed")
+        url =link
+        output_path = input("Enter the location wehere you want to save the video")
+        ydl_opts = {
+            'outtmpl': output_path,
+            'format': 'mp4/best'
+            }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        clip=VideoFileClip(file)
+
+        audio=clip.audio
+        audio.write_audiofile("temp.wav")
+
+        model=whisper.load_model("base")
+        result=model.transcribe("temp.wav")
+        text=result["text"]
+        return text
 
 def send_email(to,subject,response):
     SCOPES=["https://www.googleapis.com/auth/gmail.send"]
