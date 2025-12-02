@@ -39,9 +39,13 @@ if os.path.exists(DB_PATH):
     pass
 
 else:
-    path=input("Enter file path if document like pdf or photo then just enter the file path and if youtube video then write just vide_id")
+    path=input("Enter file path if you have documents but if you have video local in your system then write 'local' and if you have video but on youtube then just write 'youtube'")
     if path.lower().endswith(".pdf"):
         number=int(input("Enter total page you are submitting"))
+    elif path.lower()=="local":
+        video_path=input("Enter video_path")
+    elif path.lower()=="youtube":
+        link=input("Enter your  youtube video link")
 question=input("Enter Your Question")
    
 def pdf_has_text(path):
@@ -83,13 +87,8 @@ def ocr(path,lang="eng"):
     full = pytesseract.image_to_string(pil, lang=lang, config='--psm 6')
     return full
 
-def get_transcript(path):
+def get_transcript(link):
     try:
-        transcript = YouTubeTranscriptApi.get_transcript(path)
-        full = " ".join([item["text"] for item in transcript])
-        return full
-    except:
-        link=input("Enter video link to proceed")
         url =link
         output_path = input("Enter the location wehere you want to save the video")
         ydl_opts = {
@@ -97,7 +96,7 @@ def get_transcript(path):
             'format': 'mp4/best'
             }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+            file=ydl.download([url])
 
         clip=VideoFileClip(file)
 
@@ -108,6 +107,18 @@ def get_transcript(path):
         result=model.transcribe("temp.wav")
         text=result["text"]
         return text
+def local_video_processing(video_path):
+    clip=VideoFileClip(video_path)
+
+    audio=clip.audio
+    audio.write_audiofile("temp.wav")
+
+    model=whisper.load_model("base")
+    result=model.transcribe("temp.wav")
+    text=result["text"]
+    return text
+
+    
 
 def send_email(to,subject,response):
     SCOPES=["https://www.googleapis.com/auth/gmail.send"]
@@ -134,7 +145,7 @@ def send_email(to,subject,response):
     ).execute()
 
 
-def ingest_file(path):
+def ingest_file(path,link=None,video_path=None):
     if path.endswith(".pdf") and path.lower().endswith(".pdf"):
         if pdf_has_text(path):
             return extractable_text(path)
@@ -142,8 +153,12 @@ def ingest_file(path):
             return pdf_scanned_to_text(path)
     elif any(path.lower().endswith(ext) for ext in ('.png','.jpg','.jpeg')):
              return ocr(path)
+    elif path.lower()=="youtube":
+        return get_transcript(link)
+    elif path.lower()=="local":
+        return local_video_processing(video_path)
     else:
-        return get_transcript(path)
+        print('sorry')
 
 
 emb=HuggingFaceEmbeddings(model_name="BAAI/bge-large-en-v1.5")
