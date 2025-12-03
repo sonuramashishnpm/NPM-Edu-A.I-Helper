@@ -12,7 +12,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_classic.chains import RetrievalQA
 from npmai import ChatGPT,Perplexity,Grok,Gemini
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
 import youtube_transcript_api
 import numpy as np
 import pytesseract
@@ -32,8 +32,11 @@ if email.lower()=="y":
 else:
     pass
 
+video_path = None
+link = None
+path = None
 
-DB_PATH=input("Enter the name you want for your knowledge base")
+DB_PATH=input("Enter the name you want for your knowledge base if existed and you want to reuse then write that knowledge base name if not exist name the knowledge base")
 
 if os.path.exists(DB_PATH):
     pass
@@ -88,25 +91,33 @@ def ocr(path,lang="eng"):
     return full
 
 def get_transcript(link):
+    url = link
+    output_path = input("Enter your file location where we will sasve yt video")
+    ydl_opts = {
+        'outtmpl': output_path,
+        'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'noplaylist': True,
+        'ignoreerrors': 'only_sample',
+        'extractor_args': {'youtube': {'player_client': 'default'}}, 
+        'age_limit': 99,
+        }
     try:
-        url =link
-        output_path = input("Enter the location wehere you want to save the video")
-        ydl_opts = {
-            'outtmpl': output_path,
-            'format': 'mp4/best'
-            }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            file=ydl.download([url])
+            ydl.download([url])
+            print("\nDownload finished successfully!")
+    except Exception as e:
+        print(f"\nAn error occurred during download: {e}")
+    print("If the error is 'Sign In', you need to provide cookies as mentioned previously.")
 
-        clip=VideoFileClip(file)
+    clip=VideoFileClip(hitler.mp4)
 
-        audio=clip.audio
-        audio.write_audiofile("temp.wav")
+    audio=clip.audio
+    audio.write_audiofile("temp.wav")
 
-        model=whisper.load_model("base")
-        result=model.transcribe("temp.wav")
-        text=result["text"]
-        return text
+    model=whisper.load_model("base")
+    result=model.transcribe("temp.wav")
+    text=result["text"]
+    return text
 def local_video_processing(video_path):
     clip=VideoFileClip(video_path)
 
@@ -170,7 +181,7 @@ if os.path.exists(DB_PATH):
         allow_dangerous_deserialization=True
         )
 else:
-    document=ingest_file(path)
+    document=ingest_file(path,link=link,video_path=video_path)
 
     docs_for_rag=document
     text_splitter=RecursiveCharacterTextSplitter(
