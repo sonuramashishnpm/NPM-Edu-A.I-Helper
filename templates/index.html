@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NPM Edu A.I</title>
+  <link rel="stylesheet" href="/static/NPMaistyle.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="header">NPM Edu A.I.</header>
+
+  <video autoplay muted loop id="background-video">
+    <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4" type="video/mp4">
+  </video>
+  <div id="video-overlay"></div>
+
+  <h2>NPM Edu A.I ask anything</h2>
+
+  <p>AI:</p>
+  <p id="response"></p>
+
+  <div class="stickdiv">
+    <input type="text" id="userInput" placeholder="Type your question here..." />
+    <button onclick="askAI()">Send</button>
+    
