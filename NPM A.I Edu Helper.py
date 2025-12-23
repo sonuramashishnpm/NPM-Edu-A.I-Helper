@@ -1,4 +1,3 @@
-llms=input("Enter A.I from which you want to study so select and write exact from here:-{'ChatGPT','Grok','Perplexity','Gemini','GeminiAIMode'}:")
 email=input("Do you want to send your question response to other person via email(gmail) if yes then just write'y' and if no just write 'n'")
 if email.lower()=="y":
     to=input("write email id of that person you want to send just write email id")
@@ -11,7 +10,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_classic.chains import RetrievalQA
-from npmai import ChatGPT,Perplexity,Grok,Gemini
+from npmai import Ollama
 from moviepy import VideoFileClip
 import youtube_transcript_api
 import numpy as np
@@ -49,7 +48,7 @@ else:
         video_path=input("Enter video_path")
     elif path.lower()=="youtube":
         link=input("Enter your  youtube video link")
-question=input("Enter Your Question")
+prompts=input("Enter Your Question")
    
 def pdf_has_text(path):
     doc=fitz.open(path)
@@ -196,8 +195,8 @@ else:
 
 retriever=vector_db.as_retriever()
 
-llm=globals()[llms]()
-
+llm=Ollama()
+model="llama3.2"
 qa=RetrievalQA.from_chain_type(
     llm=llm,
     retriever=retriever,
@@ -205,7 +204,7 @@ qa=RetrievalQA.from_chain_type(
     )
 
    
-response=qa.invoke(question)
+response=qa.invoke(prompts,model)
 print(response)
 if email.lower()=="y":
     subject=f"Query:{question} and below answer"
