@@ -195,8 +195,10 @@ else:
 
 retriever=vector_db.as_retriever()
 
-llm=Ollama()
-model="llama3.2"
+llm=Ollama(
+    model="llama3.2",
+    temperature=0.8
+)
 qa=RetrievalQA.from_chain_type(
     llm=llm,
     retriever=retriever,
