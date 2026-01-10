@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NPM Edu A.I</title>
+  <link rel="stylesheet" href="NPMaistyle.css">
+</head>
+
+<body>
+<header class="header">NPM Edu A.I</header>
+
+<video autoplay muted loop id="background-video">
+  <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4">
+</video>
+<div id="video-overlay"></div>
+
+<h2>Ask Anything</h2>
+<p id="response"></p>
+<div class="stickdiv">
+
+  <input id="db" placeholder="Knowledge Base Name"><br>
+
+  <select id="source">
+    <option value="">No document</option>
+    <option value="pdf">PDF</option>
+    <option value="image">Image</option>
+  </select><br>
+  <input type="file" id="file"><br>
+
+  <input id="question" placeholder="Your question"><br>
+  <button onclick="ask()">Send</button>
+
+</div>
+
+<script>
+
+async function ask() {
+  const data = {
+    db_name: db.value,
+    question: question.value,
+    source_type: source.value,
+  };
+
+  if (file.files.length) {
+    const fd = new FormData();
+    fd.append("file", file.files[0]);
+    const res = await fetch("/upload", {method:"POST", body:fd});
+    const j = await res.json();
+    data.file_path = j.path;
+  }
+
+  response.innerText = "Thinking...";
+  const res = await fetch("/ask", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(data)
+  });
+  const j = await res.json();
+  response.innerText = j.response;
+}}
+</script>
+</body>
+</html>
