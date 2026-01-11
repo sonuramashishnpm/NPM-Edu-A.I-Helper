@@ -20,7 +20,7 @@ llm = Ollama(
     model="llama3.2",
     temperature=0.8
 )
-embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-large-en-v1.5")
+embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 # ---------------- HELPERS ---------------- #
 
