@@ -167,6 +167,8 @@ def ingest_file(path,link=None,video_path=None):
         return get_transcript(link)
     elif path.lower()=="local":
         return local_video_processing(video_path)
+    elif path.lower().endswith(".txt"):
+        return path
     else:
         print('sorry')
 
