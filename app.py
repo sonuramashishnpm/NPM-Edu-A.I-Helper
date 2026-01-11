@@ -22,6 +22,30 @@ llm = Ollama(
 )
 embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-large-en-v1.5")
 
+# ---------------- HELPERS ---------------- #
+
+def extract_pdf(path):
+    doc = fitz.open(path)
+    text = ""
+    for p in doc:
+        t = p.get_text().strip()
+        if t:
+            text += t
+    if text:
+        return text
+    images = convert_from_path(path)
+    return "\n".join(pytesseract.image_to_string(img) for img in images)
+
+def ocr_image(path):
+    img = cv2.imread(path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return pytesseract.image_to_string(gray)
+
+def text_processes(path):
+    with open(path,"r") as f:
+        text=f.read()
+        return text
+
 # ---------------- ROUTES ---------------- #
 
 @app.route("/")
@@ -51,6 +75,10 @@ def ask():
             file_path = data["file_path"]
             text = ocr_image(file_path)
 
+        elif source_type== "text":
+            file_path=data["file_path"]
+            text= text_processes(file_path)
+            
         splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         chunks = splitter.split_text(text)
         vector_db = FAISS.from_texts(chunks, embeddings)
@@ -64,25 +92,6 @@ def ask():
 
     response = qa.invoke(question)
     return jsonify({"response": str(response)})
-
-# ---------------- HELPERS ---------------- #
-
-def extract_pdf(path):
-    doc = fitz.open(path)
-    text = ""
-    for p in doc:
-        t = p.get_text().strip()
-        if t:
-            text += t
-    if text:
-        return text
-    images = convert_from_path(path)
-    return "\n".join(pytesseract.image_to_string(img) for img in images)
-
-def ocr_image(path):
-    img = cv2.imread(path)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    return pytesseract.image_to_string(gray)
 
 # ---------------- FILE UPLOAD ---------------- #
 
