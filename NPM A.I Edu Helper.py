@@ -128,6 +128,10 @@ def local_video_processing(video_path):
     text=result["text"]
     return text
 
+def text_processes(path):
+    with open(path,"r") as f:
+        text=f.read()
+        return text
     
 
 def send_email(to,subject,response):
@@ -168,7 +172,7 @@ def ingest_file(path,link=None,video_path=None):
     elif path.lower()=="local":
         return local_video_processing(video_path)
     elif path.lower().endswith(".txt"):
-        return path
+        return text_processes(path)
     else:
         print('sorry')
 
