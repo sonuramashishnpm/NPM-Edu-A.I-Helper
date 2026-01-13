@@ -18,7 +18,10 @@ llm = Ollama(
     model="llama3.2",
     temperature=0.8
 )
-embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={'device': 'cpu'}
+)
 
 # ---------------- HELPERS ---------------- #
 
