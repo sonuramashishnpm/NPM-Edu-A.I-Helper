@@ -18,7 +18,7 @@ llm = Ollama(
     model="llama3.2",
     temperature=0.8
 )
-embeddings = FastEmbeddings(
+embeddings = FastEmbedEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
     max_length=512
 )
