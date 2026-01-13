@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from npmai import Ollama
-import os, fitz, cv2, base64
-import pytesseract
-from pdf2image import convert_from_path
-from PIL import Image
+import os, base64
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_classic.chains import RetrievalQA
+import httpx
 
 
 app = Flask(__name__)
@@ -24,22 +22,21 @@ embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 # ---------------- HELPERS ---------------- #
 
-def extract_pdf(path):
-    doc = fitz.open(path)
-    text = ""
-    for p in doc:
-        t = p.get_text().strip()
-        if t:
-            text += t
-    if text:
-        return text
-    images = convert_from_path(path)
-    return "\n".join(pytesseract.image_to_string(img) for img in images)
+async def extract_pdf(path):
+    async with httpx.AsyncClient() as client:
+        with open(path,"rb") as f:
+            file=f
+            text=await client.post("https://npmai-api.onrender.com/uploadfile",files={
+                "file":("document.pdf",file, "application/pdf")})
+            return text.text
 
-def ocr_image(path):
-    img = cv2.imread(path)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    return pytesseract.image_to_string(gray)
+async def ocr_image(path):
+    async with httpx.AsyncClient() as client:
+        with open(path,"rb") as f:
+            file=f
+            text=await client.post("https://npmvoiceai.onrender.com/ocr",files={
+                "file":("image.png",file,"image/png")})
+            return text.text
 
 def text_processes(path):
     with open(path,"r") as f:
