@@ -3,7 +3,7 @@ from npmai import Ollama
 import os, base64
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_classic.chains import RetrievalQA
 import httpx
 
@@ -18,9 +18,9 @@ llm = Ollama(
     model="llama3.2",
     temperature=0.8
 )
-embeddings = HuggingFaceEmbeddings(
+embeddings = FastEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
-    model_kwargs={'device': 'cpu'}
+    max_length=512
 )
 
 # ---------------- HELPERS ---------------- #
