@@ -7,9 +7,5 @@ langchain-classic
 faiss-cpu
 sentence-transformers
 huggingface-hub
-pymupdf
-pdf2image
-pytesseract
-Pillow
-opencv-python-headless
 gunicorn
+httpx
