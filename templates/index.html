@@ -1,44 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>NPM Edu A.I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='NPMaistyle.css') }}">
 </head>
 
 <body>
+
 <header class="header">NPM Edu A.I</header>
 
 <video autoplay muted loop id="background-video">
   <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4">
 </video>
+<div id="video-overlay"></div>
 
-<h2>Ask Anything</h2>
-<p id="response"></p>
+<main class="container">
 
-<div class="stickdiv">
+  <h2>Ask Anything</h2>
+  <p id="response"></p>
 
-  <p>Upload PDF</p>
-  <input type="file" id="pdf_file" accept=".pdf"><br>
+  <div class="card">
 
-  <p>Upload Image</p>
-  <input type="file" id="image_file" accept=".png,.jpg,.jpeg"><br>
+    <label>Upload PDF</label>
+    <input type="file" id="pdf_file" accept=".pdf">
 
-  <p>YouTube Link</p>
-  <input id="link" placeholder="Enter youtube video link"><br>
+    <label>Upload Image</label>
+    <input type="file" id="image_file" accept=".png,.jpg,.jpeg">
 
-  <p>Upload Local Video</p>
-  <input type="file" id="video_file" accept=".mp4"><br>
+    <label>YouTube Link</label>
+    <input id="link" placeholder="Enter YouTube video link">
 
-  <p>Knowledge Base Name</p>
-  <input id="db" placeholder="Knowledge Base Name"><br>
+    <label>Upload Local Video</label>
+    <input type="file" id="video_file" accept=".mp4">
 
-  <p>Your Question</p>
-  <input id="question" placeholder="Your question"><br>
+    <label>Knowledge Base Name</label>
+    <input id="db" placeholder="Knowledge Base Name">
 
-  <button onclick="ask()">Send</button>
+    <label>Your Question</label>
+    <input id="question" placeholder="Your question">
 
-</div>
+    <button onclick="ask()">Send</button>
 
+  </div>
+
+</main>
 <script>
 async function ask() {
   const fd = new FormData();
@@ -90,4 +96,5 @@ async function ask() {
 
 </body>
 </html>
+
 
