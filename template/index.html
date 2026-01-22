@@ -19,12 +19,7 @@
 
   <input id="db" placeholder="Knowledge Base Name"><br>
 
-  <select id="source">
-    <option value="">No document</option>
-    <option value="pdf">PDF</option>
-    <option value="image">Image</option>
-    <option value="text">Text</option>
-  </select><br>
+
   <input type="file" id="file"><br>
 
   <input id="question" placeholder="Your question"><br>
@@ -33,32 +28,27 @@
 </div>
 
 <script>
-
 async function ask() {
-  const data = {
-    db_name: db.value,
-    question: question.value,
-    source_type: source.value,
-  };
+  const data = new FormData();
+  data.append("db_name", db.value);
+  data.append("question", question.value);
 
-  if (file.files.length) {
-    const fd = new FormData();
-    fd.append("file", file.files[0]);
-    const res = await fetch("/upload", {method:"POST", body:fd});
-    const j = await res.json();
-    data.file_path = j.path;
+  if (file.files.length > 0) {
+    data.append("file", file.files[0]);
   }
 
   response.innerText = "Thinking...";
   const res = await fetch("/ask", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
+    method: "POST",
+    body: data
   });
   const j = await res.json();
   response.innerText = j.response;
-}}
+}
+</script>
+
 </script>
 </body>
 
 </html>
+
