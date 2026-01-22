@@ -11,44 +11,82 @@
 <video autoplay muted loop id="background-video">
   <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4">
 </video>
-<div id="video-overlay"></div>
 
 <h2>Ask Anything</h2>
 <p id="response"></p>
+
 <div class="stickdiv">
 
+  <p>Upload PDF</p>
+  <input type="file" id="pdf_file" accept=".pdf"><br>
+
+  <p>Upload Image</p>
+  <input type="file" id="image_file" accept=".png,.jpg,.jpeg"><br>
+
+  <p>YouTube Link</p>
+  <input id="link" placeholder="Enter youtube video link"><br>
+
+  <p>Upload Local Video</p>
+  <input type="file" id="video_file" accept=".mp4"><br>
+
+  <p>Knowledge Base Name</p>
   <input id="db" placeholder="Knowledge Base Name"><br>
 
-
-  <input type="file" id="file"><br>
-
+  <p>Your Question</p>
   <input id="question" placeholder="Your question"><br>
+
   <button onclick="ask()">Send</button>
 
 </div>
 
 <script>
 async function ask() {
-  const data = new FormData();
-  data.append("db_name", db.value);
-  data.append("question", question.value);
+  const fd = new FormData();
 
-  if (file.files.length > 0) {
-    data.append("file", file.files[0]);
+  const pdf = pdf_file.files[0];
+  const img = image_file.files[0];
+  const vid = video_file.files[0];
+  const yt  = link.value.trim();
+
+  let sources = [pdf, img, vid, yt].filter(x => x);
+
+  if (sources.length === 0) {
+    alert("Please provide ONE source");
+    return;
+  }
+
+  if (sources.length > 1) {
+    alert("Please provide ONLY ONE source");
+    return;
+  }
+
+  if (!db.value || !question.value) {
+    alert("DB name and question are required");
+    return;
+  }
+
+  fd.append("DB_PATH", db.value);
+  fd.append("query", question.value);
+
+  if (pdf) fd.append("file", pdf);
+  else if (img) fd.append("file", img);
+  else if (vid) fd.append("file", vid);
+  else if (yt) {
+    fd.append("link", yt);
+    fd.append("output_path", "yt_video.mp4"); // REQUIRED
   }
 
   response.innerText = "Thinking...";
+
   const res = await fetch("/ask", {
     method: "POST",
-    body: data
+    body: fd
   });
+
   const j = await res.json();
   response.innerText = j.response;
 }
 </script>
 
-</script>
 </body>
-
 </html>
-
