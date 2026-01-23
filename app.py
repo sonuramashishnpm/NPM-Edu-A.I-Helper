@@ -28,16 +28,15 @@ def ask():
         data["output_path"] = request.form.get("output_path")
 
      try:
-        res = requests.post(HF_API, data=data, files=files if files else None, timeout=300)
-        
-        if "application/json" in res.headers.get("Content-Type", ""):
-            return jsonify({"response": res.json().get("response")})
-        else:
-            # Change 500 to 200 so the frontend can safely parse the error JSON
-            return jsonify({"response": f"HF Error: {res.status_code}. API might be down or blocked."})
-
-    except Exception as e:
-        return jsonify({"response": f"Flask Error: {str(e)}"})
+         res = requests.post(HF_API, data=data, files=files if files else None, timeout=300)
+         
+         if "application/json" in res.headers.get("Content-Type", ""):
+             return jsonify({"response": res.json().get("response")})
+         else:
+             return jsonify({"response": f"HF Error: {res.status_code}. API might be down or blocked."})
+     
+     except Exception as e:
+         return jsonify({"response": f"Flask Error: {str(e)}"})
         
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
