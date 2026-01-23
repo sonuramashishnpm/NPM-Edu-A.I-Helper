@@ -82,19 +82,32 @@ async function ask() {
     fd.append("output_path", "yt_video.mp4"); // REQUIRED
   }
 
-  response.innerText = "Thinking...";
+    response.innerText = "Thinking...";
 
-  const res = await fetch("/ask", {
-    method: "POST",
-    body: fd
-  });
+  try {
+    const res = await fetch("/ask", {
+      method: "POST",
+      body: fd
+    });
 
-  const j = await res.json();
-  response.innerText = j.response;
+    const text = await res.text(); // Read as text first
+    try {
+      const j = JSON.parse(text); // Try to turn it into JSON
+      response.innerText = j.response || "No response field";
+    } catch (e) {
+      // If it's NOT JSON, show the HTML/Text error directly
+      console.error("Server returned non-JSON:", text);
+      response.innerText = "Server Error: received HTML instead of JSON.";
+    }
+  } catch (err) {
+    response.innerText = "Network Error: Could not connect to Flask.";
+  }
+
 }
 </script>
 
 </body>
 </html>
+
 
 
