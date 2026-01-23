@@ -27,14 +27,23 @@ def ask():
         data["link"] = request.form.get("link")
         data["output_path"] = request.form.get("output_path")
 
-    res = requests.post(
-        HF_API,
-        data=data,
-        files=files if files else None,
-        timeout=300
-    )
+    try:
+        res = requests.post(
+            HF_API,
+            data=data,
+            files=files if files else None,
+            timeout=300
+        )
+        
+        # Check if the response is actually JSON
+        if "application/json" in res.headers.get("Content-Type", ""):
+            return jsonify({"response": res.json().get("response", "No response field found")})
+        else:
+            # If HF returns HTML (error), return that error text to the frontend
+            return jsonify({"response": f"API Error: Server returned HTML instead of JSON. Status: {res.status_code}"}), 500
 
-    return jsonify({"response": res.json().get("response")})
-
+    except Exception as e:
+        return jsonify({"response": f"Server Error: {str(e)}"}), 500
+        
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
