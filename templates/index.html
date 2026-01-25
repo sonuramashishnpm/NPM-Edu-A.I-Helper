@@ -57,8 +57,7 @@ function appendMessage(role, text) {
 }
   
 async function ask() {
-  appendMessage("You", prompt);
-    inputField.value = ""; 
+  
   
   const fd = new FormData();
 
@@ -83,6 +82,8 @@ async function ask() {
     alert("DB name and question are required");
     return;
   }
+  appendMessage("You", question.value);
+    inputField.value = ""; 
 
   fd.append("DB_PATH", db.value);
   fd.append("query", question.value);
@@ -120,6 +121,7 @@ async function ask() {
 
 </body>
 </html>
+
 
 
 
