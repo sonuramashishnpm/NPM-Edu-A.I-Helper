@@ -92,8 +92,6 @@ async function ask() {
     fd.append("output_path", "yt_video.mp4"); // REQUIRED
   }
 
-    response.innerText = "Thinking...";
-
   try {
     const res = await fetch("/ask", {
       method: "POST",
@@ -119,6 +117,7 @@ async function ask() {
 
 </body>
 </html>
+
 
 
 
