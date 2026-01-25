@@ -18,7 +18,8 @@
 <main class="container">
 
   <h2>Ask Anything</h2>
-  <p id="response"></p>
+  <div id="chat-box" style="height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; background: rgba(0,0,0,0.5); color: white; white-space: pre-wrap;">
+  </div>
 
   <div class="card">
 
@@ -46,6 +47,15 @@
 
 </main>
 <script>
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chat-box");
+  const msgDiv = document.createElement("div");
+  msgDiv.style.marginBottom = "15px";
+  msgDiv.innerHTML = `<strong>${role}:</strong> ${text}`;
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight; 
+}
+  
 async function ask() {
   const fd = new FormData();
 
@@ -93,7 +103,8 @@ async function ask() {
     const text = await res.text(); // Read as text first
     try {
       const j = JSON.parse(text); // Try to turn it into JSON
-      response.innerText = j.response || "No response field";
+
+      appendMessage("AI",j.response)
     } catch (e) {
       // If it's NOT JSON, show the HTML/Text error directly
       console.error("Server returned non-JSON:", text);
@@ -108,6 +119,7 @@ async function ask() {
 
 </body>
 </html>
+
 
 
 
