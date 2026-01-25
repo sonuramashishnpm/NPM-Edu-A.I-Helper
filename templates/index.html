@@ -83,7 +83,6 @@ async function ask() {
     return;
   }
   appendMessage("You", question.value);
-    inputField.value = ""; 
 
   fd.append("DB_PATH", db.value);
   fd.append("query", question.value);
@@ -121,6 +120,7 @@ async function ask() {
 
 </body>
 </html>
+
 
 
 
