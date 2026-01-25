@@ -62,9 +62,9 @@ def ask():
         full_prompt = f"Context history:\n{history}\nHuman: {data}\nAI:"
         
         res = requests.post(HF_API, data=data, files=files if files else None, timeout=300)
-        response = str(result)
+        response = str(res)
         
-        memory.save_context(prompt, response)
+        memory.save_context(data, response)
         
         if "application/json" in res.headers.get("Content-Type", ""):
             return jsonify({"response": res.json().get("response")})
