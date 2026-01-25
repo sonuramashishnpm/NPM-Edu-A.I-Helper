@@ -57,6 +57,9 @@ function appendMessage(role, text) {
 }
   
 async function ask() {
+  appendMessage("You", prompt);
+    inputField.value = ""; 
+  
   const fd = new FormData();
 
   const pdf = pdf_file.files[0];
@@ -117,6 +120,7 @@ async function ask() {
 
 </body>
 </html>
+
 
 
 
