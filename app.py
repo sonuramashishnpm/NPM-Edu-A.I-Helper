@@ -40,8 +40,9 @@ def ask():
     try:
         history = memory.load_memory_variables()
         full_prompt = f"Context history:\n{history}\nHuman: {data}\nAI:"
-        
-        res = requests.post(HF_API, data=data, files=files if files else None, timeout=1200)
+        temperature=0.5
+        model="llama3.2"
+        res = requests.post(HF_API, temperature=temperature, model=model, data=data, files=files if files else None, timeout=1200)
         response = str(res)
         
         memory.save_context(data, response)
