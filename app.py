@@ -27,6 +27,8 @@ def ask():
     # Required
     data["query"] = request.form.get("query")
     data["DB_PATH"] = request.form.get("DB_PATH")
+    data["temperature"] = 0.5
+    data["model"] = "llama3.2"
 
     # Optional
     if "file" in request.files:
@@ -40,9 +42,7 @@ def ask():
     try:
         history = memory.load_memory_variables()
         full_prompt = f"Context history:\n{history}\nHuman: {data}\nAI:"
-        temperature=0.5
-        model="llama3.2"
-        res = requests.post(HF_API, temperature=temperature, model=model, data=data, files=files if files else None, timeout=1200)
+        res = requests.post(HF_API, data=data, files=files if files else None, timeout=1200)
         response = str(res)
         
         memory.save_context(data, response)
