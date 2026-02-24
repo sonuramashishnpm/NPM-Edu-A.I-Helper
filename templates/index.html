@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NPM Edu A.I</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='NPMaistyle.css') }}">
+</head>
+
+<body>
+
+<header class="header">NPM Edu A.I</header>
+
+<video autoplay muted loop id="background-video">
+  <source src="https://npmexplorer.netlify.app/NPM%20ai%20backgrond%20video.mp4">
+</video>
+<div id="video-overlay"></div>
+
+<main class="container">
+
+  <h2>Ask Anything</h2>
+  <div id="chat-box" style="height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; background: rgba(0,0,0,0.5); color: white; white-space: pre-wrap;">
+  </div>
+
+  <div class="card">
+
+    <label>Upload PDF</label>
+    <input type="file" id="pdf_file" accept=".pdf">
+
+    <label>Upload Image</label>
+    <input type="file" id="image_file" accept=".png,.jpg,.jpeg">
+
+    <label>YouTube Link</label>
+    <input id="link" placeholder="Enter YouTube video link">
+
+    <label>Upload Local Video</label>
+    <input type="file" id="video_file" accept=".mp4">
+
+    <label>Knowledge Base Name</label>
+    <input id="db" placeholder="Knowledge Base Name">
+
+    <label>Your Question</label>
+    <input id="question" placeholder="Your question">
+
+    <button onclick="ask()">Send</button>
+
+  </div>
+
+</main>
+<script>
+function appendMessage(role, text) {
+  const chatBox = document.getElementById("chat-box");
+  const msgDiv = document.createElement("div");
+  msgDiv.style.marginBottom = "15px";
+  msgDiv.innerHTML = `<strong>${role}:</strong> ${text}`;
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight; 
+}
+  
+async function ask() {
+  
+  
+  const fd = new FormData();
+
+  const pdf = pdf_file.files[0];
+  const img = image_file.files[0];
+  const vid = video_file.files[0];
+  const yt  = link.value.trim();
+
+  let sources = [pdf, img, vid, yt].filter(x => x);
+
+  if (sources.length === 0) {
+    alert("Please provide ONE source");
+    return;
+  }
+
+  if (sources.length > 1) {
+    alert("Please provide ONLY ONE source");
+    return;
+  }
+
+  if (!db.value || !question.value) {
+    alert("DB name and question are required");
+    return;
+  }
+  appendMessage("You", question.value);
+
+  fd.append("DB_PATH", db.value);
+  fd.append("query", question.value);
+
+  if (pdf) fd.append("file", pdf);
+  else if (img) fd.append("file", img);
+  else if (vid) fd.append("file", vid);
+  else if (yt) {
+    fd.append("link", yt);
+    fd.append("output_path", "yt_video.mp4"); // REQUIRED
+  }
+
+  try {
+    const res = await fetch("/ask", {
+      method: "POST",
+      body: fd
+    });
+
+    const text = await res.text(); // Read as text first
+    try {
+      const j = JSON.parse(text); // Try to turn it into JSON
+
+      appendMessage("AI",j.response)
+    } catch (e) {
+      // If it's NOT JSON, show the HTML/Text error directly
+      console.error("Server returned non-JSON:", text);
+      response.innerText = "Server Error: received HTML instead of JSON.";
+    }
+  } catch (err) {
+    response.innerText = "Network Error: Could not connect to Flask.";
+  }
+
+}
+</script>
+
+</body>
+</html>
