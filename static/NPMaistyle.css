@@ -1,0 +1,148 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== BODY ===== */
+body {
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+  padding: 20px;
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+  color: #fff;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+/* ===== VIDEO ===== */
+#background-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+#video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 30, 0.65);
+  z-index: -1;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* ===== TITLE ===== */
+h2 {
+  font-size: 2.4rem;
+  color: #60a5fa;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+}
+
+/* ===== RESPONSE BOX ===== */
+#response {
+  background: rgba(15, 23, 42, 0.85);
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 30px;
+  text-align: left;
+  white-space: pre-wrap;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* ===== LABELS ===== */
+label {
+  text-align: left;
+  font-weight: 600;
+  color: #cbd5f5;
+}
+
+/* ===== INPUTS ===== */
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 30px;
+  border: none;
+  background: #1e293b;
+  color: #e5e7eb;
+  font-size: 15px;
+  outline: none;
+}
+
+input::placeholder {
+  color: #94a3b8;
+}
+
+input:focus {
+  background: #334155;
+  box-shadow: 0 0 0 2px #60a5fa;
+}
+
+/* ===== BUTTON ===== */
+button {
+  margin-top: 10px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg, #3b82f6, #60a5fa);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59,130,246,0.6);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  .header {
+    font-size: 30px;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
