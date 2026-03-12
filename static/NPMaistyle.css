@@ -7,7 +7,7 @@
 
 /* ===== BODY ===== */
 body {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
   background: #0f172a;
   color: #e5e7eb;
   min-height: 100vh;
@@ -25,7 +25,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 /* ===== VIDEO ===== */
@@ -82,11 +82,13 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* ===== LABELS ===== */
-label {
+label,
+#section_input_db,
+#sectioninput {
   text-align: left;
   font-weight: 600;
   color: #cbd5f5;
@@ -113,6 +115,24 @@ input:focus {
   box-shadow: 0 0 0 2px #60a5fa;
 }
 
+select {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 30px;
+  border: 2px solid #4010c4;
+  background: #1e293b; /* Matches your input background */
+  color: #e5e7eb;
+  font-size: 15px;
+  outline: none;
+  appearance: none; /* Removes default browser arrow */
+  cursor: pointer;
+}
+
+select:focus {
+  background: #334155;
+  box-shadow: 0 0 0 2px #60a5fa;
+}
+
 /* ===== BUTTON ===== */
 button {
   margin-top: 10px;
@@ -129,7 +149,7 @@ button {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(59,130,246,0.6);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.6);
 }
 
 /* ===== MOBILE ===== */
