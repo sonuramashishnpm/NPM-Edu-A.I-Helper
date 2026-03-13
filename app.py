@@ -52,7 +52,7 @@ def ask():
     res = requests.post(HF_API, data=data, files=files if files else None, timeout=1200)
     response = str(res)
         
-    memory.save_context(data["query"], response)
+    memory.save_context(data["query"], res.json().get("response"))
         
     if "application/json" in res.headers.get("Content-Type", ""):
       return jsonify({"response": res.json().get("response")})
@@ -89,10 +89,10 @@ def use_vectordb():
         public=True,
         query=query,
     )
-
-    response=rag.vector_db_use()
-    memory1.save_context(query,response)
-    return jsonify({"response":response})
+    
+  response=rag.vector_db_use()
+  memory1.save_context(query,response)
+  return jsonify({"response":response})
 
   
 @app.route("/develop",methods=["POST"])
