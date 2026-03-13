@@ -40,7 +40,7 @@ def ask():
       file_name=secure_filename(f.filename)
       file_paths=os.path.join(folders,file_name)
       f.save(file_paths)
-      files.append(file_paths)
+      files.append(('file', open(file_paths, 'rb')))
 
   if request.form.get("link"):
     data["link"] = request.form.get("link")
