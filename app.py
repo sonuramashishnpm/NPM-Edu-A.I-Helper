@@ -6,7 +6,9 @@ import uuid
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "979f83cfdc626eb35847c1ae3193c5accc3d0bfbb38991ee287ec108b2bd7739")
+app.secret_key = os.environ.get("SECRET_KEY")
+
+#979f83cfdc626eb35847c1ae3193c5accc3d0bfbb38991ee287ec108b2bd7739
 
 HF_API = "https://sonuramashish22028704-npmeduai.hf.space/ingestion"
 
