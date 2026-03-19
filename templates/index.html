@@ -88,6 +88,7 @@
       </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net"></script>
     <script>
       let currentMode = "Chat";
 
@@ -128,8 +129,10 @@
       function appendMessage(role, text) {
         const chatBox = document.getElementById("chat-box");
         const msgDiv = document.createElement("div");
+        const aires = text;
+        const mdres = marked.parse(text);
         msgDiv.style.marginBottom = "15px";
-        msgDiv.innerHTML = `<strong>${role}:</strong> ${text}`;
+        msgDiv.innerHTML = `<strong>${role}:</strong> ${mdres}`;
         chatBox.appendChild(msgDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
       }
