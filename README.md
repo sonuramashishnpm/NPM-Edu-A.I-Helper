@@ -1,35 +1,5 @@
 # NPM Rag A.I
 
-## 🚀 Quick Start
-
-```bash
-# 1. Clone the project
-git clone https://github.com/sonuramashishnpm/NPM-Rag-AI.git
-cd NPM-Rag-AI
-
-# 2. Install dependencies
-pip install flask werkzeug requests npmai
-
-# 3. (Recommended) Set secret key for secure sessions
-export SECRET_KEY="your-very-long-random-secret-string-here"
-
-# 4. Launch the app
-python app.py
-```
-
-→ Open browser → https://npmragai.onrender.com
-
-Select mode:
-- Chat
-- Use Your ORG RAG Chat
-- Develop Rag Chat
-
-Upload PDFs / images / videos / YouTube link  
-Enter knowledge base name → start asking questions or create new DB
-
-Powered by npmai library (Memory + Rag classes) + llama3.2 via custom Hugging Face Spaces endpoint.  
-No vector database installation needed — npmai handles ingestion, storage & retrieval.
-
 ## 📖 Project Overview
 
 NPM Rag A.I is a beautiful, easy-to-use web application that lets you instantly create and talk to your own private or public knowledge bases using RAG (Retrieval-Augmented Generation).
@@ -66,6 +36,17 @@ Part of the NPMAI ecosystem — powerful AI made stupidly simple and free.
 - Modern dark UI with glassmorphism cards + animated background video
 - Zero-config RAG powered by npmai library
 - Clear error messages shown right in the chat box
+
+Select mode:
+- Chat
+- Use Your ORG RAG Chat
+- Develop Rag Chat
+
+Upload PDFs / images / videos / YouTube link  
+Enter knowledge base name → start asking questions or create new DB
+
+Powered by npmai library (Memory + Rag classes) + llama3.2 via custom Hugging Face Spaces endpoint.  
+No vector database installation needed — npmai handles ingestion, storage & retrieval.
 
 ## Important Update in NPMAI RAG:-
 
@@ -129,6 +110,25 @@ These architectural changes make **NPMAI** one of the most efficient open-source
 - LLM → llama3.2 (via custom HF Spaces ingestion & query API)
 - Security → session-based user ID + secure_filename + optional private key
 - Deployment ready → works on Render, Railway, Fly.io, Hugging Face Spaces, etc.
+
+## 🚀 Quick Start
+
+```bash
+# 1. Clone the project
+git clone https://github.com/sonuramashishnpm/NPM-Rag-AI.git
+cd NPM-Rag-AI
+
+# 2. Install dependencies
+pip install flask werkzeug requests npmai
+
+# 3. (Recommended) Set secret key for secure sessions
+export SECRET_KEY="your-very-long-random-secret-string-here"
+
+# 4. Launch the app
+python app.py
+```
+
+→ Open browser → https://npmragai.onrender.com
 
 ## 👨‍💻 Developer
 
